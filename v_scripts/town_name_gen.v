@@ -108,7 +108,7 @@ fn gen_ghalim() ?string {
 
 [inline]
 fn gen_luhama() ?string {
-	return random(luhama, 0, luhama.len)? + random(luhama, 0, luhama.len)?
+	return random(luhama, 0, luhama.len)? + random(luhama, 0, luhama.len)? + random(luhama, 0, luhama.len)?
 }
 
 fn gen_ferthin() ?string {
