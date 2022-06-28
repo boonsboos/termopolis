@@ -9,6 +9,6 @@ fn init() {
 }
 
 fn main() {
-	env.generate_world([u32(1), 999], 2)
+	env.generate_world([u32(1), 929], 2)
 	env.print_world()
 }
