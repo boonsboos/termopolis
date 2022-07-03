@@ -5,9 +5,9 @@ import rand
 import vsl.noise
 
 const (
-	sea_tr = -0.1
-	ocean_tr = -0.6
-	mountain_tr = 0.85
+	sea_tr = -0.5
+	ocean_tr = -0.92
+	mountain_tr = 0.92
 )
 
 [inline]
@@ -30,12 +30,9 @@ pub fn generate_world(seed u64, size int) {
 	for i, row in noise_map {
 		for j, b in row {
 			mut kind := env.TileType.land // by default, no need to check for other things
-			match true {
-				b < sea_tr      { kind = .sea }
-				b < ocean_tr    { kind = .ocean }
-				b > mountain_tr { kind = .mountain }
-				else {}
-			}
+			if b <= sea_tr      { kind = .sea }
+			if b <= ocean_tr    { kind = .ocean }
+			if b >= mountain_tr { kind = .mountain }
 			world.tiles[i][j] = Tile { kind, j, i}
 		}
 	}

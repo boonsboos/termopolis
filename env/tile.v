@@ -15,7 +15,7 @@ fn tile_to_ascii(typ TileType) string {
 		.ocean    {term.blue('=')}
 		.sea      {term.bright_blue('~')}
 		.land     {term.bright_green('#') }
-		.mountain {term.gray('^')}
+		.mountain {term.rgb(192, 255, 192, '^')}
 	}
 }
 
