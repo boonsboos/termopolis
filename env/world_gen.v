@@ -1,30 +1,40 @@
 module env
 
+import term
 import rand
+
 import vsl.noise
 
 const (
-	sea_tr = 0.0
+	sea_tr = -0.1
 	ocean_tr = -0.6
-	mountain_tr = 0.75
+	mountain_tr = 0.85
 )
 
 pub fn print_world() {
 	for i in world.tiles {
-		for _ in 0..5 {
+		for _ in 0..4 {
 			for j in i {
-				for _ in 0..10 {
-					print('${tile_to_ascii(j.kind)}')
+				for _ in 0..8 {
+					if world.cursor_y == j.y && world.cursor_x == j.x {
+						print(term.bg_green('${tile_to_ascii(j.kind)}'))
+					} else {
+						print('${tile_to_ascii(j.kind)}')
+					}
+					
 				}
-				print(' ')
+				print(term.reset(''))
 			}
 			print('\n')
 		}
 	}
 }
 
-pub fn generate_world(seed []u32, size int) {
-	rand.seed(seed)
+// seed should be printed/saved somewhere
+pub fn generate_world(seed u64, size int) {
+
+	world.size = size
+	rand.seed(make_seed(seed))
 	noise_map := noise.perlin_many(size, size) or {
 		eprintln('failed to generate world of size $size x $size')
 		exit(1)
