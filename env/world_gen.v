@@ -1,6 +1,5 @@
 module env
 
-import term
 import rand
 
 import vsl.noise
@@ -11,29 +10,16 @@ const (
 	mountain_tr = 0.85
 )
 
-pub fn print_world() {
-	for i in world.tiles {
-		for _ in 0..4 {
-			for j in i {
-				for _ in 0..8 {
-					if world.cursor_y == j.y && world.cursor_x == j.x {
-						print(term.bg_green('${tile_to_ascii(j.kind)}'))
-					} else {
-						print('${tile_to_ascii(j.kind)}')
-					}
-					
-				}
-				print(term.reset(''))
-			}
-			print('\n')
-		}
-	}
+[inline]
+pub fn make_seed(number u64) []u32 {
+	world.seed = [u32(number >> 32), u32(number >> 16)]
+	return world.seed
 }
 
 // seed should be printed/saved somewhere
 pub fn generate_world(seed u64, size int) {
 
-	world.size = size
+	world.size = size - 1
 	rand.seed(make_seed(seed))
 	noise_map := noise.perlin_many(size, size) or {
 		eprintln('failed to generate world of size $size x $size')
@@ -50,20 +36,7 @@ pub fn generate_world(seed u64, size int) {
 				b > mountain_tr { kind = .mountain }
 				else {}
 			}
-			world.tiles[i][j] = Tile { kind, i, j}
+			world.tiles[i][j] = Tile { kind, j, i}
 		}
 	}
-}
-
-fn noise_map_to_ascii(noise_map [][]f32) [][]string {
-	mut result := [][]string{len: noise_map.len, init: []string{len: noise_map.len}} // we know the world will always be square
-	for i, a in noise_map {
-		for j, b in a {
-			if b > 0.0   { result[i][j] = '#' } // ground
-			if b < 0.0   { result[i][j] = '~' } // sea
-			if b < -0.75 { result[i][j] = '=' } // ocean
-			if b > 0.75  { result[i][j] = '^' } // mountain
-		}
-	}
-	return result
 }

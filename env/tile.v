@@ -1,5 +1,7 @@
 module env
 
+import term
+
 pub enum TileType {
 	ocean
 	sea
@@ -7,12 +9,13 @@ pub enum TileType {
 	mountain
 }
 
+[inline]
 fn tile_to_ascii(typ TileType) string {
 	return match typ {
-		.ocean    {'='}
-		.sea      {'~'}
-		.land     {'#'}
-		.mountain {'^'}
+		.ocean    {term.blue('=')}
+		.sea      {term.bright_blue('~')}
+		.land     {term.bright_green('#') }
+		.mountain {term.gray('^')}
 	}
 }
 
@@ -22,4 +25,9 @@ pub struct Tile {
 	// resource ResourceType
 	x int
 	y int
+}
+
+[inline]
+pub fn (t Tile) pretty() string {
+	return 'Tile: ($t.x,$t.y) = $t.kind'
 }

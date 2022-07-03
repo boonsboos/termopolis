@@ -5,10 +5,13 @@ import env
 __global world env.World
 
 fn init() {
-	world = env.init_world()
+	world = env.World{}
 }
 
 fn main() {
 	env.generate_world(u64(3234), 11)
-	env.print_world()
+	for world.active {
+		world.print()
+		world.handle_input()
+	}
 }
